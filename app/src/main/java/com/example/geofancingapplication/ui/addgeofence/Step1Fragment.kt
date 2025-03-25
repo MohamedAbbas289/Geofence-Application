@@ -1,10 +1,11 @@
-package com.example.geofancingapplication
+package com.example.geofancingapplication.ui.addgeofence
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.geofancingapplication.R
 
 
 class Step1Fragment : Fragment() {

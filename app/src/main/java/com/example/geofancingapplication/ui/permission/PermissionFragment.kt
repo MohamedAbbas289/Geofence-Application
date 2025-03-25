@@ -1,4 +1,4 @@
-package com.example.geofancingapplication
+package com.example.geofancingapplication.ui.permission
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.geofancingapplication.R
 import com.example.geofancingapplication.databinding.FragmentPermissionBinding
 import com.example.geofancingapplication.util.ExtensionFunctions.observeOnce
 import com.example.geofancingapplication.util.Permissions

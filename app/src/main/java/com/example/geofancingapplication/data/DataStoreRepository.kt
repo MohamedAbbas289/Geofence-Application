@@ -1,4 +1,4 @@
-package com.example.geofancingapplication
+package com.example.geofancingapplication.data
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey

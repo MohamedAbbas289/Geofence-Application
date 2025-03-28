@@ -87,5 +87,11 @@
             app:popUpTo="@id/geofencesFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <action
+        android:id="@+id/action_step1Fragment_to_mapsFragment"
+        app:destination="@id/mapsFragment"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/step1Fragment"
+        app:popUpToInclusive="true" />
 
 </navigation>

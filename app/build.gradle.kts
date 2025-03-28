@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
+    id("kotlin-kapt")
     alias(libs.plugins.androidx.navigation.safe.args)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.dagger.hilt)
@@ -70,12 +71,12 @@ dependencies {
     //room
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
-    ksp(libs.room.runtime)
-    ksp(libs.room.compiler)
+    kapt(libs.room.runtime)
+    kapt(libs.room.compiler)
 
     //dagger hilt
     implementation(libs.hilt.android)
-    ksp(libs.dagger.hilt.android.compiler)
+    kapt(libs.dagger.hilt.android.compiler)
 
     implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)

@@ -8,9 +8,10 @@
         <variable
             name="sharedViewModel"
             type="com.example.geofancingapplication.viewmodels.SharedViewModel" />
-        <!--<variable
+
+        <variable
             name="step2ViewModel"
-            type="com.example.geofenceapp.viewmodels.Step2ViewModel" />-->
+            type="com.example.geofancingapplication.ui.addgeofence.viewmodels.Step2ViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,7 +46,8 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/geofence_location_textInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-
+            handleNetworkConnection="@{step2ViewModel.internetAvailable}"
+            handleRecyclerView="@{predictionsRecyclerView}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -63,6 +65,7 @@
                 android:id="@+id/geofence_location_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@{sharedViewModel.geoLocationName}"
                 android:drawableStart="@drawable/ic_search"
                 android:drawablePadding="16dp" />
 
@@ -87,7 +90,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="32dp"
             android:text="@string/next"
-
+            android:enabled="@{step2ViewModel.nextButtonEnable}"
             android:textColor="@color/view_state_background_color"
             android:textSize="18sp"
             android:textStyle="bold"

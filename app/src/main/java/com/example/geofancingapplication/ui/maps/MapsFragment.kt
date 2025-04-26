@@ -13,6 +13,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 
 
@@ -29,7 +30,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     ): View {
         _binding = FragmentMapsBinding.inflate(inflater, container, false)
 
-        binding.floatingActionButton.setOnClickListener {
+        binding.addGeofenceFab.setOnClickListener {
             findNavController().navigate(R.id.action_mapsFragment_to_add_geofence_graph)
         }
 
@@ -44,6 +45,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        map.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.mapstyle))
         val sydney = LatLng(-34.0, 151.0)
         map.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         map.moveCamera(CameraUpdateFactory.newLatLng(sydney))

@@ -38,7 +38,7 @@ object Permissions {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             EasyPermissions.requestPermissions(
                 fragment,
-                "Background Location Permission is Essentional to this Application. Without it we will not be able to Provide you with our Services.",
+                "Background Location Permission is Essential to this Application. Without it we will not be able to Provide you with our Services.",
                 PERMISSION_BACKGROUND_LOCATION_REQUEST_CODE,
                 Manifest.permission.ACCESS_BACKGROUND_LOCATION
             )

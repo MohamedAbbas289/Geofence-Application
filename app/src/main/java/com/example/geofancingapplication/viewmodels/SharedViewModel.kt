@@ -9,6 +9,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.geofancingapplication.data.DataStoreRepository
+import com.example.geofancingapplication.data.GeofenceEntity
+import com.example.geofancingapplication.data.GeofenceRepository
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SharedViewModel @Inject constructor(
     application: Application,
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val geofenceRepository: GeofenceRepository
 ) : AndroidViewModel(application) {
     val app = application
 
@@ -32,6 +35,7 @@ class SharedViewModel @Inject constructor(
 
     var geoCitySelected = false
     var geofenceReady = false
+    var geofencePrepared = false
 
     //data store
     val readFirstLaunch = dataStoreRepository.readFirstLaunch.asLiveData()
@@ -39,6 +43,21 @@ class SharedViewModel @Inject constructor(
     fun saveFirstLaunch(firstLaunch: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             dataStoreRepository.saveFirstLaunch(firstLaunch)
+        }
+    }
+
+    //database
+    val readGeofences = geofenceRepository.readGeofences.asLiveData()
+
+    fun addGeofence(geofenceEntity: GeofenceEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            geofenceRepository.addGeofence(geofenceEntity)
+        }
+    }
+
+    fun deleteGeofence(geofenceEntity: GeofenceEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            geofenceRepository.deleteGeofence(geofenceEntity)
         }
     }
 

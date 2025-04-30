@@ -2,6 +2,7 @@ package com.example.geofancingapplication.viewmodels
 
 import android.app.Application
 import android.content.Context
+import android.graphics.Bitmap
 import android.location.LocationManager
 import android.os.Build
 import android.provider.Settings
@@ -12,10 +13,13 @@ import com.example.geofancingapplication.data.DataStoreRepository
 import com.example.geofancingapplication.data.GeofenceEntity
 import com.example.geofancingapplication.data.GeofenceRepository
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.maps.android.SphericalUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.sqrt
 
 @HiltViewModel
 class SharedViewModel @Inject constructor(
@@ -32,6 +36,7 @@ class SharedViewModel @Inject constructor(
     var geoLocationName = "Search a city"
     var geoLatLng = LatLng(0.0, 0.0)
     var geoRadius = 500.0f
+    var geoSnapshot: Bitmap? = null
 
     var geoCitySelected = false
     var geofenceReady = false
@@ -49,7 +54,7 @@ class SharedViewModel @Inject constructor(
     //database
     val readGeofences = geofenceRepository.readGeofences.asLiveData()
 
-    fun addGeofence(geofenceEntity: GeofenceEntity) {
+    private fun addGeofence(geofenceEntity: GeofenceEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             geofenceRepository.addGeofence(geofenceEntity)
         }
@@ -59,6 +64,28 @@ class SharedViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             geofenceRepository.deleteGeofence(geofenceEntity)
         }
+    }
+
+    fun addGeofenceToDatabase(location: LatLng) {
+        val geofenceEntity = GeofenceEntity(
+            geoID,
+            geoName,
+            geoLocationName,
+            location.latitude,
+            location.longitude,
+            geoRadius,
+            geoSnapshot!!
+        )
+        addGeofence(geofenceEntity)
+    }
+
+    fun getBounds(center: LatLng, radius: Float): LatLngBounds {
+        val distanceFromCenterCorner = radius * sqrt(2.0)
+        val southWestCorner = SphericalUtil
+            .computeOffset(center, distanceFromCenterCorner, 255.0)
+        val northEastCorner = SphericalUtil
+            .computeOffset(center, distanceFromCenterCorner, 45.0)
+        return LatLngBounds(southWestCorner, northEastCorner)
     }
 
     fun checkDeviceLocationSettings(context: Context): Boolean {

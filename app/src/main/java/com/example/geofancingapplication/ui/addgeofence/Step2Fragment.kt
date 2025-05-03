@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.geofancingapplication.R
 import com.example.geofancingapplication.databinding.FragmentStep2Binding
-import com.example.geofancingapplication.ui.addgeofence.adapters.PredictionsAdapter
+import com.example.geofancingapplication.ui.adapters.PredictionsAdapter
 import com.example.geofancingapplication.ui.addgeofence.viewmodels.Step2ViewModel
 import com.example.geofancingapplication.util.NetworkListener
 import com.example.geofancingapplication.util.hide

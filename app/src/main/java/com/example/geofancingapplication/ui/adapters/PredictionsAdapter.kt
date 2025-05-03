@@ -1,4 +1,4 @@
-package com.example.geofancingapplication.ui.addgeofence.adapters
+package com.example.geofancingapplication.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

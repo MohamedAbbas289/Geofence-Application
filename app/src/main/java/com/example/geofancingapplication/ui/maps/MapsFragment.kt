@@ -12,10 +12,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.geofancingapplication.R
 import com.example.geofancingapplication.databinding.FragmentMapsBinding
 import com.example.geofancingapplication.util.Permissions.hasBackgroundLocationPermission
 import com.example.geofancingapplication.util.Permissions.requestBackgroundLocationPermission
+import com.example.geofancingapplication.util.disable
+import com.example.geofancingapplication.util.enable
 import com.example.geofancingapplication.util.hide
 import com.example.geofancingapplication.util.show
 import com.example.geofancingapplication.viewmodels.SharedViewModel
@@ -41,6 +44,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLongClickLis
     private var _binding: FragmentMapsBinding? = null
     private val binding get() = _binding!!
 
+    private val args by navArgs<MapsFragmentArgs>()
+
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private lateinit var map: GoogleMap
@@ -52,6 +57,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLongClickLis
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMapsBinding.inflate(inflater, container, false)
+        initViews()
         return binding.root
     }
 
@@ -59,12 +65,14 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLongClickLis
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
-        initViews()
     }
 
     private fun initViews() {
         binding.addGeofenceFab.setOnClickListener {
             findNavController().navigate(R.id.action_mapsFragment_to_add_geofence_graph)
+        }
+        binding.geofencesFab.setOnClickListener {
+            findNavController().navigate(R.id.action_mapsFragment_to_geofencesFragment)
         }
     }
 
@@ -80,6 +88,17 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLongClickLis
         }
         onGeofenceReady()
         observeDatabase()
+        backFromGeofence()
+    }
+
+    private fun backFromGeofence() {
+        if (args.geofenceEntity != null) {
+            val selectedGeofence = LatLng(
+                args.geofenceEntity!!.latitude,
+                args.geofenceEntity!!.longitude
+            )
+            zoomToGeofence(selectedGeofence, args.geofenceEntity!!.radius)
+        }
     }
 
     private fun observeDatabase() {
@@ -148,6 +167,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLongClickLis
     private fun setupGeofence(location: LatLng) {
         lifecycleScope.launch {
             if (sharedViewModel.checkDeviceLocationSettings(requireContext())) {
+                binding.geofencesFab.disable()
+                binding.addGeofenceFab.disable()
+                binding.geofenceProgressBar.show()
                 drawCircle(location, sharedViewModel.geoRadius)
                 drawMarker(location, sharedViewModel.geoName)
                 zoomToGeofence(circle.center, circle.radius.toFloat())
@@ -155,6 +177,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMapLongClickLis
                 map.snapshot(this@MapsFragment)
                 delay(2000)
                 sharedViewModel.addGeofenceToDatabase(location)
+                delay(2000)
+                sharedViewModel.startGeofence(location.latitude, location.longitude)
+
+                sharedViewModel.resetSharedValues()
+                binding.geofencesFab.enable()
+                binding.addGeofenceFab.enable()
+                binding.geofenceProgressBar.hide()
             } else {
                 Toast.makeText(
                     requireContext(),

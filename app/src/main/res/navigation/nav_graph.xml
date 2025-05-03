@@ -28,10 +28,23 @@
         tools:layout="@layout/fragment_maps">
         <action
             android:id="@+id/action_mapsFragment_to_geofencesFragment"
-            app:destination="@id/geofencesFragment" />
+            app:destination="@id/geofencesFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_mapsFragment_to_add_geofence_graph"
-            app:destination="@id/add_geofence_graph" />
+            app:destination="@id/add_geofence_graph"
+            app:enterAnim="@anim/from_bottom"
+            app:exitAnim="@anim/to_top"
+            app:popEnterAnim="@anim/from_top"
+            app:popExitAnim="@anim/to_bottom" />
+        <argument
+            android:name="geofenceEntity"
+            android:defaultValue="@null"
+            app:argType="com.example.geofancingapplication.data.GeofenceEntity"
+            app:nullable="true" />
     </fragment>
     <navigation
         android:id="@+id/add_geofence_graph"
@@ -45,6 +58,10 @@
                 android:id="@+id/action_step1Fragment_to_step2Fragment"
                 app:destination="@id/step2Fragment"
                 app:popUpTo="@id/step1Fragment"
+                app:enterAnim="@anim/from_right"
+                app:exitAnim="@anim/to_left"
+                app:popEnterAnim="@anim/from_left"
+                app:popExitAnim="@anim/to_right"
                 app:popUpToInclusive="true" />
             <action
                 android:id="@+id/action_step1Fragment_to_permissionFragment"
@@ -61,6 +78,10 @@
                 android:id="@+id/action_step2Fragment_to_step3Fragment"
                 app:destination="@id/step3Fragment"
                 app:popUpTo="@id/step2Fragment"
+                app:enterAnim="@anim/from_right"
+                app:exitAnim="@anim/to_left"
+                app:popEnterAnim="@anim/from_left"
+                app:popExitAnim="@anim/to_right"
                 app:popUpToInclusive="true" />
             <action
                 android:id="@+id/action_step2Fragment_to_step1Fragment"
